@@ -30,5 +30,20 @@ namespace RestaurantTask.Controllers
             }
             return BadRequest("Some Properties Are Not Valid"); // Status Code: 400
         }
+
+        [HttpPost("Login")]
+        public async Task<IActionResult> LoginAsync([FromBody]LoginModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _userService.LoginUserAsync(model);
+
+                if(result.isSuccess)
+                    return Ok(result);
+
+                return BadRequest(result);
+            }
+            return BadRequest("Some Properties Are Not Valid");
+        }
     }
 }
