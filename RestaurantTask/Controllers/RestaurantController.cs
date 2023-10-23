@@ -40,9 +40,22 @@ namespace RestaurantTask.Controllers
         }
 
         [HttpPut]
-        public ActionResult<RestaurantInput> Update(Restaurant restaurant)
+        public ActionResult<RestaurantInput> Update(int id, RestaurantInput restaurantInput)
         {
-            var result = _restaurantService.UpdateRestaurant(restaurant.Id, restaurant);
+            var restaurant = _restaurantService.GetSingleRestaurant(id);
+
+            if (restaurant is null)
+            {
+                return NotFound("Restaurant Not Found");
+            }
+
+            restaurant.Name = restaurantInput.Name;
+            restaurant.Address = restaurantInput.Address;
+            restaurant.PhoneNumber = restaurantInput.PhoneNumber;
+            restaurant.OpenTime = restaurantInput.OpenTime;
+            restaurant.CloseTime = restaurantInput.CloseTime;
+
+            var result = _restaurantService.UpdateRestaurant(id, restaurant);
             return Ok(result);
         }
 
@@ -50,7 +63,7 @@ namespace RestaurantTask.Controllers
         public ActionResult<Restaurant> Delete(int id)
         {
             var result = _restaurantService.DeleteRestaurant(id);
-            if (result == null)
+            if (result is null)
                 return NotFound("Restaurant Not Found");
 
             return Ok(result);

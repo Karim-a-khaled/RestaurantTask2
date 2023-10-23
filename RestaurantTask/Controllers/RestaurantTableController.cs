@@ -18,40 +18,51 @@ namespace RestaurantTask.Controllers
         }
 
         [HttpGet("GetAll")]
-        public ActionResult<List<Table>> GetAllRestaurantTables()
+        public ActionResult<List<RestaurantTable>> GetAllRestaurantTables()
         {
-            var tables = _restaurantTableService.GetAllRestaurantTables();
-            return Ok(tables);
+            var restaurantTable = _restaurantTableService.GetAllRestaurantTables();
+            return Ok(restaurantTable);
         }
 
         [HttpGet("GetById")]
-        public ActionResult<Table> GetSingleRestaurantTable(int id)
+        public ActionResult<RestaurantTable> GetSingleRestaurantTable(int id)
         {
             var result = _restaurantTableService.GetSingleRestaurantTable(id);
             if (result is null)
                 return NotFound("Table Not Found");
+
             return Ok(result);
         }
 
-        [HttpPost]
-        public ActionResult<Table> Post(RestaurantTableInput restaurantTable)
+       [HttpPost]
+        public ActionResult<RestaurantTableInput> Post(RestaurantTableInput restaurantTable)
         {
             var result = _restaurantTableService.AddRestaurantTable(restaurantTable);
             return Ok(result);
         }
 
         [HttpPut]
-        public ActionResult<RestaurantTable> UpdateRestaurantTable(RestaurantTable restaurantTable)
+        public ActionResult<RestaurantTableInput> Update(int id, RestaurantTableInput restaurantTableInput)
         {
-            var result = _restaurantTableService.UpdateRestaurantTable(restaurantTable.Id, restaurantTable);
+            var restaurantTable = _restaurantTableService.GetSingleRestaurantTable(id);
+
+            if (restaurantTable is null)
+            {
+                return NotFound("Table Not Found");
+            }
+
+            restaurantTable.NumberOfSeats = restaurantTableInput.NumberOfSeats;
+
+
+            var result = _restaurantTableService.UpdateRestaurantTable(id, restaurantTable);
             return Ok(result);
         }
 
         [HttpDelete]
-        public ActionResult<Table> DeleteRestaurantTable(int id)
+        public ActionResult<RestaurantTable> DeleteRestaurantTable(int id)
         {
             var result = _restaurantTableService.DeleteRestaurantTable(id);
-            if (result == null)
+            if (result is null)
                 return NotFound("Table Not Found");
 
             return Ok(result);

@@ -33,16 +33,27 @@ namespace RestaurantTask.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Reservation> Post(ReservationInput reservation)
+        public ActionResult<ReservationInput> Post(ReservationInput reservation)
         {
             var result = _reservationService.AddReservation(reservation);
             return Ok(result);
         }
 
         [HttpPut]
-        public ActionResult<Reservation> Update(Reservation reservation)
+        public ActionResult<ReservationInput> Update(int id, ReservationInput reservationInput)
         {
-            var result = _reservationService.UpdateReservation(reservation.Id, reservation);
+            var reservation = _reservationService.GetSingleReservation(id);
+
+            if (reservation is null)
+            {
+                return NotFound("Reservation Not Found");
+            }
+
+            reservation.ReservationTime = reservationInput.ReservationTime;
+            reservation.isCancelled = reservationInput.isCancelled;
+
+
+            var result = _reservationService.UpdateReservation(id, reservation);
             return Ok(result);
         }
 
@@ -50,7 +61,7 @@ namespace RestaurantTask.Controllers
         public ActionResult<Reservation> Delete(int id)
         {
             var result = _reservationService.DeleteReservation(id);
-            if (result == null)
+            if (result is null)
                 return NotFound("Reservation Not Found");
 
             return Ok(result);

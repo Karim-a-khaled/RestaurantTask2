@@ -1,18 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using RestaurantTask.Data;
 using RestaurantTask.Models;
 using RestaurantTask.Models.DTOS;
-using static RestaurantTask.Services.RestaurantTableService.RestaurantTableService;
 
 namespace RestaurantTask.Services.RestaurantTableService
-{
-    public class RestaurantTableService
-    {
-        public class RestaurantTableServices : IRestaurantTableService
+{   
+        public class RestaurantTableService : IRestaurantTableService
         {
             private readonly DataContext _context;
-            public RestaurantTableServices(DataContext context)
+            public RestaurantTableService(DataContext context)
             {
                 _context = context;
             }
@@ -47,13 +43,13 @@ namespace RestaurantTask.Services.RestaurantTableService
 
             public RestaurantTable GetSingleRestaurantTable(int id)
             {
-                var table = _context.RestaurantTables
+                var restuarantTable = _context.RestaurantTables
                     .Include(rt => rt.Restaurant)
                     .Include(rt => rt.Reservations)
                     .Include(rt => rt.TableType)
                     .FirstOrDefault(u => u.Id == id);
 
-                return table;
+                return restuarantTable;
             }
 
             public RestaurantTable UpdateRestaurantTable(int id, RestaurantTable restaurantTable)
@@ -64,4 +60,3 @@ namespace RestaurantTask.Services.RestaurantTableService
             }
         }
     }
-}

@@ -5,6 +5,7 @@ using RestaurantTask.Data;
 using RestaurantTask.Services;
 using RestaurantTask.Services.ReservationService;
 using RestaurantTask.Services.RestaurantService;
+using RestaurantTask.Services.RestaurantTableService;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,7 +15,7 @@ builder.Services.AddDbContext<DataContext>();
 
 builder.Services.AddScoped<IRestaurantService, RestaurantService>();
 builder.Services.AddScoped<IReservationService, ReservationService>();
-
+builder.Services.AddScoped<IRestaurantTableService, RestaurantTableService>();
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 {

@@ -43,7 +43,6 @@ namespace RestaurantTask.Services.RestaurantService
             .ToList();
         }
     
-
         public Restaurant GetSingleRestaurant(int id)
         {
         var restaurant = _context.Restaurants
