@@ -7,7 +7,7 @@ namespace RestaurantTask.Services.RestaurantService
     {
         List<Restaurant> GetAllRestaurants();
         Restaurant GetSingleRestaurant(int id);
-        Restaurant AddRestaurant(RestaurantInput restaurant);
+        Restaurant AddRestaurant(RestaurantDto restaurant);
         Restaurant UpdateRestaurant(int id, Restaurant request);
         Restaurant DeleteRestaurant(int id);
     }

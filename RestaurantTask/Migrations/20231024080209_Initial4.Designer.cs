@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RestaurantTask.Data;
 
@@ -11,9 +12,11 @@ using RestaurantTask.Data;
 namespace RestaurantTask.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20231024080209_Initial4")]
+    partial class Initial4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -299,26 +302,38 @@ namespace RestaurantTask.Migrations
                     b.Property<int>("NumberOfSeats")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(5,2)");
-
                     b.Property<int?>("RestaurantId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("isIndoor")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("isLounge")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("isOutdoor")
-                        .HasColumnType("bit");
+                    b.Property<int?>("TableType_Id")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("RestaurantId");
 
+                    b.HasIndex("TableType_Id")
+                        .IsUnique()
+                        .HasFilter("[TableType_Id] IS NOT NULL");
+
                     b.ToTable("RestaurantTables");
+                });
+
+            modelBuilder.Entity("RestaurantTask.Models.TableType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TableTypes");
                 });
 
             modelBuilder.Entity("RestaurantTask.Models.AppUser", b =>
@@ -400,7 +415,13 @@ namespace RestaurantTask.Migrations
                         .WithMany("RestaurantTables")
                         .HasForeignKey("RestaurantId");
 
+                    b.HasOne("RestaurantTask.Models.TableType", "TableType")
+                        .WithOne("RestaurantTable")
+                        .HasForeignKey("RestaurantTask.Models.RestaurantTable", "TableType_Id");
+
                     b.Navigation("Restaurant");
+
+                    b.Navigation("TableType");
                 });
 
             modelBuilder.Entity("RestaurantTask.Models.Restaurant", b =>
@@ -411,6 +432,11 @@ namespace RestaurantTask.Migrations
             modelBuilder.Entity("RestaurantTask.Models.RestaurantTable", b =>
                 {
                     b.Navigation("Reservations");
+                });
+
+            modelBuilder.Entity("RestaurantTask.Models.TableType", b =>
+                {
+                    b.Navigation("RestaurantTable");
                 });
 
             modelBuilder.Entity("RestaurantTask.Models.AppUser", b =>

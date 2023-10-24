@@ -19,17 +19,19 @@ namespace RestaurantTask.Data
             var tables = modelBuilder.Entity<RestaurantTable>();
             var reservations = modelBuilder.Entity<Reservation>();
             var users = modelBuilder.Entity<AppUser>();
-            var tableTypes = modelBuilder.Entity<TableType>();
+            //var tableTypes = modelBuilder.Entity<TableType>();
+
+            tables.Property(rt => rt.Price).HasColumnType("decimal(5,2)");
 
             restaurants.HasMany(r => r.RestaurantTables).WithOne(t => t.Restaurant);
             tables.HasMany(t => t.Reservations).WithOne(r => r.RestaurantTable);
             users.HasMany(u => u.Reservations).WithOne(r => r.User);
-            tableTypes.HasOne(tt => tt.RestaurantTable).WithOne(t => t.TableType).HasForeignKey<RestaurantTable>("TableType_Id");
+            //tableTypes.HasOne(tt => tt.RestaurantTable).WithOne(t => t.TableType).HasForeignKey<RestaurantTable>("TableType_Id");
         }
         public DbSet<Reservation> Reservations { get; set; }
         public DbSet<Restaurant> Restaurants { get; set; }
         public DbSet<RestaurantTable> RestaurantTables { get; set; }
-        public DbSet<TableType> TableTypes { get; set; }
+        //public DbSet<TableType> TableTypes { get; set; }
     }
     
 }

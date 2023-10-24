@@ -17,14 +17,14 @@ namespace RestaurantTask.Controllers
         }
 
         [HttpGet("GetAll")]
-        public ActionResult<List<RestaurantInput>> GetAllRestaurants()
+        public ActionResult<List<RestaurantDto>> GetAllRestaurants()
         {
             var restaurant = _restaurantService.GetAllRestaurants();
             return Ok(restaurant);
         }
 
         [HttpGet("GetById")]
-        public ActionResult<RestaurantInput> GetSingle(int id)
+        public ActionResult<RestaurantDto> GetSingle(int id)
         {
             var result = _restaurantService.GetSingleRestaurant(id);
             if (result is null)
@@ -33,14 +33,14 @@ namespace RestaurantTask.Controllers
         }
 
         [HttpPost]
-        public ActionResult<RestaurantInput> Post(RestaurantInput restaurant)
+        public ActionResult<RestaurantDto> Post(RestaurantDto restaurant)
         {
             var result = _restaurantService.AddRestaurant(restaurant);
             return Ok(result);
         }
 
         [HttpPut]
-        public ActionResult<RestaurantInput> Update(int id, RestaurantInput restaurantInput)
+        public ActionResult<RestaurantDto> Update(int id, RestaurantDto restaurantInput)
         {
             var restaurant = _restaurantService.GetSingleRestaurant(id);
 

@@ -33,14 +33,21 @@ namespace RestaurantTask.Controllers
         }
 
         [HttpPost]
-        public ActionResult<ReservationInput> Post(ReservationInput reservation)
+        public ActionResult<ReservationDto> Post(ReservationDto reservation)
+        {
+            var result = _reservationService.AddReservation(reservation);
+            return Ok(result);
+        }
+
+        [HttpPost("AddTableType")]
+        public ActionResult<ReservationDto> PostTableType(ReservationDto reservation)
         {
             var result = _reservationService.AddReservation(reservation);
             return Ok(result);
         }
 
         [HttpPut]
-        public ActionResult<ReservationInput> Update(int id, ReservationInput reservationInput)
+        public ActionResult<ReservationDto> Update(int id, ReservationDto reservationInput)
         {
             var reservation = _reservationService.GetSingleReservation(id);
 

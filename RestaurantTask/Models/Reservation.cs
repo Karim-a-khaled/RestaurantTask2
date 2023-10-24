@@ -4,8 +4,8 @@
     {
         public int Id  { get; set; }
         public DateTime ReservationTime { get; set; }
-        public RestaurantTable RestaurantTable { get; set;} = new RestaurantTable();
-        public AppUser User { get; set; } = new AppUser();
-        public bool isCancelled{ get; set; } = false;
+        public RestaurantTable? RestaurantTable { get; set;}
+        public AppUser? User { get; set; } 
+        public bool isCancelled{ get; set; } = false; 
     }
 }

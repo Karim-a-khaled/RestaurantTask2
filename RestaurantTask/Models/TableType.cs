@@ -4,6 +4,6 @@
     {
         public int Id { get; set; }
         public string Type { get; set; } = string.Empty;
-        public RestaurantTable RestaurantTable { get; set; } = new RestaurantTable();
+        public RestaurantTable? RestaurantTable { get; set; }
     }
 }

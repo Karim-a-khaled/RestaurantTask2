@@ -13,7 +13,7 @@ namespace RestaurantTask.Services.ReservationService
             _context = context;
         }
 
-        public Reservation AddReservation(ReservationInput reservation)
+        public Reservation AddReservation(ReservationDto reservation)
         {
             var newReservation = new Reservation()
             {

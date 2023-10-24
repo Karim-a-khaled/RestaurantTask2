@@ -13,11 +13,15 @@ namespace RestaurantTask.Services.RestaurantTableService
                 _context = context;
             }
 
-            public RestaurantTable AddRestaurantTable(RestaurantTableInput restaurantTable)
+            public RestaurantTable AddRestaurantTable(RestaurantTableDto restaurantTable)
             {
                 var newRestaurantTable = new RestaurantTable()
                 {
                     NumberOfSeats = restaurantTable.NumberOfSeats,
+                    isIndoor = restaurantTable.isIndoor,
+                    isOutdoor = restaurantTable.isOutdoor,
+                    isLounge = restaurantTable.isLounge,
+                    Price = restaurantTable.Price,
                 };
                 _context.RestaurantTables.Add(newRestaurantTable);
                 _context.SaveChanges();
@@ -37,7 +41,7 @@ namespace RestaurantTask.Services.RestaurantTableService
                 return _context.RestaurantTables
                     .Include(rt => rt.Restaurant)
                     .Include(rt => rt.Reservations)
-                    .Include(rt => rt.TableType)
+                    //.Include(rt => rt.TableType)
                     .ToList();
             }
 
@@ -46,7 +50,7 @@ namespace RestaurantTask.Services.RestaurantTableService
                 var restuarantTable = _context.RestaurantTables
                     .Include(rt => rt.Restaurant)
                     .Include(rt => rt.Reservations)
-                    .Include(rt => rt.TableType)
+                    //.Include(rt => rt.TableType)
                     .FirstOrDefault(u => u.Id == id);
 
                 return restuarantTable;

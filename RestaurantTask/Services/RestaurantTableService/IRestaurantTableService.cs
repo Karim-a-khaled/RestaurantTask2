@@ -8,7 +8,7 @@ namespace RestaurantTask.Services.RestaurantTableService
     {
         List<RestaurantTable> GetAllRestaurantTables();
         RestaurantTable GetSingleRestaurantTable(int id);
-        RestaurantTable AddRestaurantTable(RestaurantTableInput table);
+        RestaurantTable AddRestaurantTable(RestaurantTableDto table);
         RestaurantTable UpdateRestaurantTable(int id, RestaurantTable request);
         RestaurantTable DeleteRestaurantTable(int id);
     }

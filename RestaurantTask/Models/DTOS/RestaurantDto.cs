@@ -1,6 +1,6 @@
 ﻿namespace RestaurantTask.Models.DTOS
 {
-    public class RestaurantInput
+    public class RestaurantDto
     {
         public string Name { get; set; } = string.Empty;
         public string Address { get; set; } = string.Empty;

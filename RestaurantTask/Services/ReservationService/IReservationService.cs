@@ -7,7 +7,7 @@ namespace RestaurantTask.Services.ReservationService
     {
         List<Reservation> GetAllReservations();
         Reservation GetSingleReservation(int id);
-        Reservation AddReservation(ReservationInput reservation);
+        Reservation AddReservation(ReservationDto reservation);
         Reservation UpdateReservation(int id, Reservation request);
         Reservation DeleteReservation(int id);
     }

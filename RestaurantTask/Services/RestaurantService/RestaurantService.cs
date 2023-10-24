@@ -13,7 +13,7 @@ namespace RestaurantTask.Services.RestaurantService
             _context = context;
         }
 
-        public Restaurant AddRestaurant(RestaurantInput restaurant)
+        public Restaurant AddRestaurant(RestaurantDto restaurant)
         {
             var newRestaurant = new Restaurant()
             {

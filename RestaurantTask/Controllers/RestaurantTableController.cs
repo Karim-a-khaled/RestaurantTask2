@@ -35,14 +35,14 @@ namespace RestaurantTask.Controllers
         }
 
        [HttpPost]
-        public ActionResult<RestaurantTableInput> Post(RestaurantTableInput restaurantTable)
+        public ActionResult<RestaurantTableDto> Post(RestaurantTableDto restaurantTable)
         {
             var result = _restaurantTableService.AddRestaurantTable(restaurantTable);
             return Ok(result);
         }
 
         [HttpPut]
-        public ActionResult<RestaurantTableInput> Update(int id, RestaurantTableInput restaurantTableInput)
+        public ActionResult<RestaurantTableDto> Update(int id, RestaurantTableDto restaurantTableInput)
         {
             var restaurantTable = _restaurantTableService.GetSingleRestaurantTable(id);
 
