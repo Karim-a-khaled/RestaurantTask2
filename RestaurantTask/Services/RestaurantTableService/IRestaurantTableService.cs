@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using RestaurantTask.Models;
+﻿using RestaurantTask.Models;
 using RestaurantTask.Models.DTOS;
 
 namespace RestaurantTask.Services.RestaurantTableService

@@ -57,5 +57,22 @@ namespace RestaurantTask.Services.ReservationService
             _context.SaveChanges();
             return reservation;
         }
+
+        public bool CancelReservation(int id)
+        {
+            var reservation = _context.Reservations.Find(id);
+            if (reservation == null)
+                return false;
+
+            var currentTime = DateTime.Now;
+            var cancellationTimeLimit = reservation.ReservationTime.AddHours(-2);
+
+            if (currentTime >= cancellationTimeLimit)
+                return false;
+
+            reservation.isCancelled = true;
+            _context.SaveChanges();
+            return true;
+        }
     }
 }

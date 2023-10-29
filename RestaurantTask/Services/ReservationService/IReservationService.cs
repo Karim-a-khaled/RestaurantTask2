@@ -10,5 +10,7 @@ namespace RestaurantTask.Services.ReservationService
         Reservation AddReservation(ReservationDto reservation);
         Reservation UpdateReservation(int id, Reservation request);
         Reservation DeleteReservation(int id);
+        bool CancelReservation(int id);
+
     }
 }

@@ -1,45 +1,41 @@
-﻿using Azure.Identity;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Caching.Memory;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using RestaurantTask.DTO;
+using RestaurantTask.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace RestaurantTask.Services
+namespace RestaurantTask.Services.UserService
 {
-    public interface IUserService
-    {
-        Task<UserManagerResponse> RegisterUserAsync(RegisterModel model);
-
-        Task<UserManagerResponse> LoginUserAsync(LoginModel model);
-    }
-
     public class UserService : IUserService
     {
-        private UserManager<IdentityUser> _userManager;
-        private IConfiguration _configuration;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly IConfiguration _configuration;
 
-        public UserService(UserManager<IdentityUser> userManager, IConfiguration configuration) 
-        { 
+        public UserService(UserManager<AppUser> userManager, IConfiguration configuration)
+        {
             _userManager = userManager;
             _configuration = configuration;
         }
+
         public async Task<UserManagerResponse> RegisterUserAsync(RegisterModel model)
         {
             if (model is null)
-                throw new NullReferenceException("Register Model Is Null");
+            {
+                throw new ArgumentNullException(nameof(model), "Register Model Is Null");
+            }
 
             if (model.Password != model.ConfirmPassword)
+            {
                 return new UserManagerResponse
                 {
-                    Message = "Passwords Does Not Match",
+                    Message = "Passwords Do Not Match",
                     isSuccess = false
                 };
+            }
 
-            var identityUser = new IdentityUser 
+            var identityUser = new AppUser
             {
                 Email = model.Email,
                 UserName = model.Email
@@ -51,13 +47,14 @@ namespace RestaurantTask.Services
             {
                 return new UserManagerResponse
                 {
-                    Message = "User Was Created Successfully!",
-                    isSuccess = true,
+                    Message = "User was created successfully!",
+                   isSuccess = true,
                 };
             }
+
             return new UserManagerResponse
             {
-                Message = "User Was Not Created!",
+                Message = "User was not created!",
                 isSuccess = false,
                 Errors = result.Errors.Select(e => e.Description).ToList()
             };
@@ -67,47 +64,54 @@ namespace RestaurantTask.Services
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
 
-            if (user == null)
+            if (user is null)
             {
                 return new UserManagerResponse
                 {
-                    Message = "There Is No User With That Email Address",
+                    Message = "Invalid login attempt.",
                     isSuccess = false,
                 };
             }
+
             var result = await _userManager.CheckPasswordAsync(user, model.Password);
 
             if (!result)
+            {
                 return new UserManagerResponse
                 {
-                    Message = "Invalid Password",
+                    Message = "Invalid password.",
                     isSuccess = false,
                 };
-            var claims = new[]
-            {
-                new Claim("Email",model.Email),
-                new Claim(ClaimTypes.NameIdentifier,user.Id),
-            };
+            }
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["AuthSettings:Key"]));
+            var claims = new List<Claim>
+            {
+                new Claim("Email", model.Email),
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
+            };
+            
+            var tokKey = _configuration["TokenKey"];
+            
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokKey));
+            
+            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            
+            var expires = DateTime.Now.AddDays(7);
 
             var token = new JwtSecurityToken(
-               claims: claims,
-               expires: DateTime.Now.AddDays(30),
-               signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256));
+                claims: claims,
+                expires: expires,
+                signingCredentials: credentials
+            );
 
-            string tokenAsString = new JwtSecurityTokenHandler().WriteToken(token);
+            var tokenAsString = new JwtSecurityTokenHandler().WriteToken(token);
 
             return new UserManagerResponse
             {
                 Message = tokenAsString,
                 isSuccess = true,
-                ExpireDate = token.ValidTo
+                ExpireDate = expires
             };
-
-
-
         }
     }
-
 }

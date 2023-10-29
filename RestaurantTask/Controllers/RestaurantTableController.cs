@@ -1,6 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using RestaurantTask.Models;
 using RestaurantTask.Models.DTOS;
 using RestaurantTask.Services.RestaurantTableService;
@@ -9,6 +8,7 @@ namespace RestaurantTask.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[Authorize(Roles = "Admin")]
     public class RestaurantTableController : ControllerBase
     {
         private readonly IRestaurantTableService _restaurantTableService;

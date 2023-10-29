@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RestaurantTask.Models;
 using RestaurantTask.Models.DTOS;
@@ -8,6 +9,7 @@ namespace RestaurantTask.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ReservationController : ControllerBase
     {
         private readonly IReservationService _reservationService;
@@ -72,6 +74,16 @@ namespace RestaurantTask.Controllers
                 return NotFound("Reservation Not Found");
 
             return Ok(result);
+        }
+
+        [HttpPut("{id}/Cancel")]
+        public ActionResult<bool> CancelReservation(int id)
+        {
+            var isCancelled = _reservationService.CancelReservation(id);
+            if (!isCancelled)
+                return NotFound("Reservation Not Found or Cannot be Cancelled");
+
+            return Ok("Reservation Cancelled Successfuly!");
         }
     }
 }

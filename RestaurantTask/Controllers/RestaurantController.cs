@@ -1,13 +1,14 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using RestaurantTask.Models.DTOS;
 using RestaurantTask.Models;
 using RestaurantTask.Services.RestaurantService;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RestaurantTask.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[Authorize(Roles ="Admin")]
     public class RestaurantController : ControllerBase
     {
         private readonly IRestaurantService _restaurantService;
@@ -30,6 +31,16 @@ namespace RestaurantTask.Controllers
             if (result is null)
                 return NotFound("Restaurant Not Found");
             return Ok(result);
+        }
+
+        [HttpGet("GetByName")]
+        public ActionResult<List<Restaurant>> GetByName(string name)
+        {
+            var results = _restaurantService.GetRestaurantsByName(name);
+            if (results.Count == 0)
+                return NotFound("No restaurants found with the specified name");
+
+            return Ok(results);
         }
 
         [HttpPost]

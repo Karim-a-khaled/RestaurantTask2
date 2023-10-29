@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using RestaurantTask.DTO;
-using RestaurantTask.Services;
+using RestaurantTask.Services.UserService;
 
 namespace RestaurantTask.Controllers
 {

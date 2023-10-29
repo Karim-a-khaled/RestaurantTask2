@@ -57,5 +57,16 @@ namespace RestaurantTask.Services.RestaurantService
             _context.SaveChanges();
             return restaurant;
         }
+
+        public List<Restaurant> GetRestaurantsByName(string name)
+        {
+            var words = name.Split(' ');
+            var restaurants = _context.Restaurants
+              .AsEnumerable()
+              .Where(r => words.Any(word => r.Name.Contains(word, StringComparison.OrdinalIgnoreCase)))
+              .ToList();
+
+            return restaurants;
+        }
     }
 }
