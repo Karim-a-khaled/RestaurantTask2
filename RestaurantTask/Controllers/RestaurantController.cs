@@ -3,6 +3,8 @@ using RestaurantTask.Models.DTOS;
 using RestaurantTask.Models;
 using RestaurantTask.Services.RestaurantService;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using RestaurantTask.Services.RestaurantTableService;
 
 namespace RestaurantTask.Controllers
 {
@@ -12,9 +14,12 @@ namespace RestaurantTask.Controllers
     public class RestaurantController : ControllerBase
     {
         private readonly IRestaurantService _restaurantService;
-        public RestaurantController(IRestaurantService restaurantService)
+        private readonly IRestaurantTableService _restaurantTableService;
+
+        public RestaurantController(IRestaurantService restaurantService, IRestaurantTableService restaurantTableService)
         {
             _restaurantService = restaurantService;
+            _restaurantTableService = restaurantTableService;
         }
 
         [HttpGet("GetAll")]
@@ -66,7 +71,7 @@ namespace RestaurantTask.Controllers
             restaurant.OpenTime = restaurantInput.OpenTime;
             restaurant.CloseTime = restaurantInput.CloseTime;
 
-            var result = _restaurantService.UpdateRestaurant(id, restaurant);
+            var result = _restaurantService.UpdateRestaurant(restaurant);
             return Ok(result);
         }
 
@@ -78,6 +83,16 @@ namespace RestaurantTask.Controllers
                 return NotFound("Restaurant Not Found");
 
             return Ok(result);
+        }
+
+        [HttpPost("{restaurantId}/tables/{tableId}")]
+        public ActionResult<RestaurantDto> AddTableToRestaurant(int restaurantId, int tableId)
+        {
+            var restaurant = _restaurantService.GetSingleRestaurant(restaurantId);
+            var table = _restaurantTableService.GetSingleRestaurantTable(tableId);
+            restaurant.RestaurantTables.Add(table);
+            _restaurantService.UpdateRestaurant(restaurant);
+            return Ok(restaurant);
         }
     }
 }

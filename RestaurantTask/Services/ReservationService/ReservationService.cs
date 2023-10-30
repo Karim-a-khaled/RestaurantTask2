@@ -51,7 +51,7 @@ namespace RestaurantTask.Services.ReservationService
             return reservation;
         }
 
-        public Reservation UpdateReservation(int id, Reservation reservation)
+        public Reservation UpdateReservation(Reservation reservation)
         {
             _context.Reservations.Update(reservation);
             _context.SaveChanges();
@@ -61,7 +61,7 @@ namespace RestaurantTask.Services.ReservationService
         public bool CancelReservation(int id)
         {
             var reservation = _context.Reservations.Find(id);
-            if (reservation == null)
+            if (reservation is null)
                 return false;
 
             var currentTime = DateTime.Now;

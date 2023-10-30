@@ -51,7 +51,7 @@ namespace RestaurantTask.Services.RestaurantService
             return restaurant;
         }
 
-        public Restaurant UpdateRestaurant(int id, Restaurant restaurant)
+        public Restaurant UpdateRestaurant(Restaurant restaurant)
         {
             _context.Restaurants.Update(restaurant);
             _context.SaveChanges();
@@ -68,5 +68,5 @@ namespace RestaurantTask.Services.RestaurantService
 
             return restaurants;
         }
-    }
+    }   
 }

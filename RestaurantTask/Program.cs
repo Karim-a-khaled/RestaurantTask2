@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using RestaurantTask.Data;
 using RestaurantTask.Models;
+using RestaurantTask.Services.MemberService;
 using RestaurantTask.Services.ReservationService;
 using RestaurantTask.Services.RestaurantService;
 using RestaurantTask.Services.RestaurantTableService;
@@ -19,6 +20,7 @@ builder.Services.AddScoped<IRestaurantService, RestaurantService>();
 builder.Services.AddScoped<IReservationService, ReservationService>();
 builder.Services.AddScoped<IRestaurantTableService, RestaurantTableService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IMemberService, MemberService>();
 
 builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
 {
@@ -59,7 +61,7 @@ try
     var context = services.GetRequiredService<DataContext>();
     var userManager = services.GetRequiredService<UserManager<AppUser>>();
     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-    await Seed.SeedData(userManager, roleManager);
+    //await Seed.SeedData(userManager, roleManager);
 }
 catch (Exception ex)
 {

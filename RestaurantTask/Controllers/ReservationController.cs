@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RestaurantTask.Models;
 using RestaurantTask.Models.DTOS;
+using RestaurantTask.Services.MemberService;
 using RestaurantTask.Services.ReservationService;
 
 namespace RestaurantTask.Controllers
@@ -13,16 +14,18 @@ namespace RestaurantTask.Controllers
     public class ReservationController : ControllerBase
     {
         private readonly IReservationService _reservationService;
-        public ReservationController(IReservationService reservationService)
+        private readonly IMemberService _memberService;
+        public ReservationController(IReservationService reservationService, IMemberService memberService)
         {
             _reservationService = reservationService;
+            _memberService = memberService;
         }
 
         [HttpGet("GetAll")]
         public ActionResult<List<Reservation>> GetAllReservation()
         {
-            var restaurant = _reservationService.GetAllReservations();
-            return Ok(restaurant);
+            var restaurants = _reservationService.GetAllReservations();
+            return Ok(restaurants);
         }
 
         [HttpGet("GetById")]
@@ -62,7 +65,7 @@ namespace RestaurantTask.Controllers
             reservation.isCancelled = reservationInput.isCancelled;
 
 
-            var result = _reservationService.UpdateReservation(id, reservation);
+            var result = _reservationService.UpdateReservation(reservation);
             return Ok(result);
         }
 
@@ -84,6 +87,16 @@ namespace RestaurantTask.Controllers
                 return NotFound("Reservation Not Found or Cannot be Cancelled");
 
             return Ok("Reservation Cancelled Successfuly!");
+        }
+
+        [HttpPost("{reservationId}/users/{userId}")]
+        public ActionResult<Reservation> AddReservationToUser(int reservationId, string userId)
+        {
+            var reservation = _reservationService.GetSingleReservation(reservationId);
+            var user = _memberService.GetSingleMember(userId);
+            reservation.User = user;
+            _reservationService.UpdateReservation(reservation);
+            return Ok(reservation);
         }
     }
 }

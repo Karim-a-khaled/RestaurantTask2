@@ -9,7 +9,8 @@ namespace RestaurantTask.Services.RestaurantService
         Restaurant GetSingleRestaurant(int id);
         List<Restaurant> GetRestaurantsByName(string name);
         Restaurant AddRestaurant(RestaurantDto restaurant);
-        Restaurant UpdateRestaurant(int id, Restaurant request);
+        Restaurant UpdateRestaurant(Restaurant request);
         Restaurant DeleteRestaurant(int id);
+        
     }
 }
