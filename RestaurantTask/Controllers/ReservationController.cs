@@ -95,6 +95,7 @@ namespace RestaurantTask.Controllers
             var reservation = _reservationService.GetSingleReservation(reservationId);
             var user = _memberService.GetSingleMember(userId);
             reservation.User = user;
+            var reservationToReturn= _mapper.Map<ReservationDto>(reservation);
             _reservationService.UpdateReservation(reservation);
             return Ok(reservation);
         }
