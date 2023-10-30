@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RestaurantTask.Models;
@@ -15,10 +16,13 @@ namespace RestaurantTask.Controllers
     {
         private readonly IReservationService _reservationService;
         private readonly IMemberService _memberService;
-        public ReservationController(IReservationService reservationService, IMemberService memberService)
+        private readonly IMapper _mapper;
+
+        public ReservationController(IReservationService reservationService, IMemberService memberService, IMapper mapper)
         {
             _reservationService = reservationService;
             _memberService = memberService;
+            _mapper = mapper;
         }
 
         [HttpGet("GetAll")]
@@ -95,9 +99,9 @@ namespace RestaurantTask.Controllers
             var reservation = _reservationService.GetSingleReservation(reservationId);
             var user = _memberService.GetSingleMember(userId);
             reservation.User = user;
-            var reservationToReturn= _mapper.Map<ReservationDto>(reservation);
             _reservationService.UpdateReservation(reservation);
-            return Ok(reservation);
+            var reservationToReturn= _mapper.Map<ReservationDto>(reservation);
+            return Ok(reservationToReturn);
         }
     }
 }

@@ -8,8 +8,7 @@ namespace RestaurantTask.Mapper
     {
         public MappingProfile()
         {
-            CreateMap<Restaurant, RestaurantDto>();
-            CreateMap<RestaurantDto, Restaurant>();
+            CreateMap<Reservation, ReservationDto>();
             // Add more mappings for other classes if needed
         }
     }
